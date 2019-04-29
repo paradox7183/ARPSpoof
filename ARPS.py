@@ -79,7 +79,7 @@ print("[*] Target IP:"+target)
 
 gateway_mac = get_mac(gateway_ip)
 if gateway_mac is None:
-    print("[!] Unable to get gateway MAC address. Exiting..In the same way, spoofing has been succesfull")
+    print("[!] Unable to get gateway MAC address. Exiting..In the same way, spoofing has been succesfull, open your sniffer ;)")
     sys.exit(0)
 else:
     print("[*] Gateway MAC address:"+gateway_mac)
